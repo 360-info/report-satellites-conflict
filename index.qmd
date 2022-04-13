@@ -132,8 +132,36 @@ sat_ownership %>%
   summarise(rows = list(c(rowid))) ->
 us_group_overlap
 
+# https://cran.r-project.org/web/packages/nVennR/vignettes/nVennR.html
 plotVenn(us_group_overlap$rows, sNames = us_group_overlap$users,
   nCycles = 5000)
+
+# https://observablehq.com/@simulmedia/basic-venn-diagram
 ```
 
 This starts to give us an idea of the kinds of overlaps we can explore! In the case of the US, there's a significant overlap between commercial use and government/military uses.
+
+### Aside: what kinds of purposes do different users put satellites to?
+
+```{r}
+
+sat_ownership %>%
+  mutate(rowid = 1:n()) %>%
+  select(rowid, users, purpose) %>%
+  separate_rows(users, sep = "/") %>%
+  separate_rows(purpose, sep = "/") %>%
+  filter(!is.na(users), !is.na(purpose), users != "Earth Observation") %>%
+  mutate(purpose = fct_infreq(purpose)) %>%
+  group_by(users, purpose) %>%
+  summarise(n = n()) %>%
+  {
+    ggplot(.) +
+    aes(x = users, y = n, fill = purpose) +
+    geom_col(position = "fill") +
+    scale_fill_brewer(type = "qual") +
+    scale_y_continuous(labels = scales::label_percent()) +
+    coord_flip() +
+    theme_minimal()
+  }
+
+```
