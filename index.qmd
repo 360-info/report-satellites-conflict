@@ -1,0 +1,139 @@
+---
+title: "Satellites: Eyes in the Wartime Sky"
+# subtitle: "With another comment on the thing here"
+author: "James Goldie, 360info"
+date: "2022-04-12"
+code-fold: true
+theme: style/article.scss
+---
+
+```{r}
+#| label: import
+
+library(tidyverse)
+library(readxl)
+library(janitor)
+library(glue)
+library(here)
+library(pins)
+library(nVennR)
+
+# create /data/.cache
+data_cache <- here("data", ".cache")
+dir.create(data_cache, showWarnings = FALSE)
+
+# download the zip file (keeping it cached if we redo this)
+sat_wb <-
+  board_url(c(sat = "https://www.ucsusa.org/media/11492"),
+    cache = data_cache) %>%
+  pin_download("sat")
+```
+```{r}
+# import and tidy the data
+# (user guide: https://s3.amazonaws.com/ucs-documents/nuclear-weapons/sat-database/4-11-17-update/User+Guide+1-1-17+wAppendix.pdf)
+sats <-
+  read_excel(sat_wb) %>%
+  clean_names() 
+
+sats %>%
+  select(
+    date_of_launch,
+    name_official = current_official_name_of_satellite,
+    name_alt = name_of_satellite_alternate_names,
+    country_unreg = country_org_of_un_registry,
+    owner = operator_owner,
+    country_owner =  country_of_operator_owner,
+    users, purpose, detailed_purpose,
+    contractor, country_contractor = country_of_contractor,
+    launch_mass_kg, dry_mass_kg) ->
+sat_ownership
+
+sat_ownership %>%
+  group_by(country_owner, detailed_purpose) %>%
+  summarise(
+    num_sats = n(),
+    total_mass_dry_kg = sum(as.numeric(dry_mass_kg), na.rm = TRUE)) ->
+sat_ownership_country_purpose
+```
+
+## Main countries and purposes
+
+Most satellites serve multiple purposes. Since I want to look at satellites by purpose, I'm going to separate those pruposes out. We've gotta be careful about not double-counting satellites if we add up total satellites, though!
+
+```{r}
+sat_ownership %>%
+  separate_rows(purpose, sep = "/") %>%
+  separate_rows(country_owner, sep = "/") %>%
+  mutate(
+    country_owner = fct_lump_n(country_owner, n = 15,
+      other_level = "Other countries"),
+    purpose = fct_infreq(purpose)) %>%
+  group_by(country_owner, purpose) %>%
+  summarise(
+    num_sats = n(),
+    total_mass_dry_kg = sum(as.numeric(dry_mass_kg), na.rm = TRUE)) ->
+sat_ownership_separated
+```
+
+Let's have a look at country of ownership and purpose:
+
+```{r}
+sat_ownership_separated %>%
+filter(country_owner != "USA") %>%
+{
+  ggplot(.) +
+    aes(
+      x = reorder(country_owner, num_sats),
+      y = num_sats,
+      fill = purpose) +
+    geom_col() +
+    # scale_fill_discrete(guide = NULL) +
+    coord_flip() +
+    theme_360() +
+    theme(
+      plot.subtitle = element_markdowns(family = "Body 360info", face = "plain"),
+      panel.grid.major.y = element_blank(),
+      panel.grid.minor.y = element_blank(),
+      legend.position = c(0.6, 0.2)) +
+    labs(
+      y = "Country of owner organisation (No USA)",
+      x = "Number of satellites",
+      title = toupper("Number of active satellites"),
+      subtitle =
+        "Satellites counted more than once for multiple owners and purposes",
+      fill = "Purpose",
+      caption = paste(
+        "**CHART:** James Goldie, 360info",
+        "**DATA:** Union of Concerned Scientists",
+        sep = "<br>"))
+} %>%
+save_360plot(here("out", "sat-count-separated-nousa.png"), shape = "sdtv-portrait")
+
+knitr::include_graphics(here("out", "sat-count-separated-nousa.png"))
+```
+
+## Overlap of commercial and government/military use
+
+But what about users? Satellite users include `r glue_collapse(unique(sats$users), collapse = ", ", last = ", and ")`. There's potentially a lot of overlap between a few discrete groups here!
+
+Let's investigate that overlap:
+
+```{r}
+
+sat_ownership %>%
+  mutate(rowid = 1:n()) %>%
+  select(rowid, country_owner, users) %>%
+  separate_rows(users, sep = "/") %>%
+  filter(!is.na(users)) %>%
+  # test: USA only
+  filter(country_owner == "USA") %>%
+  # get a vector of all the row ids in each users group
+  group_by(users) %>%
+  summarise(rows = list(c(rowid))) ->
+us_group_overlap
+
+plotVenn(us_group_overlap$rows, sNames = us_group_overlap$users,
+  nCycles = 5000)
+```
+
+This starts to give us an idea of the kinds of overlaps we can explore! In the case of the US, there's a significant overlap between commercial use and government/military uses.

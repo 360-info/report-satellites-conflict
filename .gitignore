@@ -13,3 +13,6 @@ Thumbs.db
 
 # quarto
 /.quarto/
+
+# data cache
+/data/.cache
