@@ -1,0 +1,234 @@
+country_owner,sets,size
+Algeria,Government,5
+Argentina,Civil,1
+Argentina,Commercial,27
+Argentina,Government,2
+Australia,Civil/Military,2
+Australia,Commercial,10
+Australia,Military/Civil,1
+Australia,Military/Commercial,1
+Austria,Civil,1
+Azerbaijan,Government,2
+Bangladesh,Government,1
+Belarus,Government,2
+Belgium,Civil,1
+Belgium,Commercial,1
+Bolivia,Government,1
+Brazil,Commercial,8
+Brazil,Commercial/Military,1
+Brazil,Government,3
+Brazil,Government/Civil,1
+Bulgaria,Commercial,2
+Canada,Civil,1
+Canada,Commercial,38
+Canada,Government,8
+Canada,Government/Civil,4
+Canada,Military,1
+Chile,Government/Military,1
+China,Civil,30
+China,Commercial,137
+China,Government,182
+China,Government/Civil,1
+China,Government/Commercial,5
+China,Military,89
+China,Military/Government,50
+China/Brazil,Government,2
+China/France,Commercial,1
+China/France,Government,1
+China/Italy,Government,1
+Colombia,Military,1
+Czech Republic,Commercial,2
+Czech Republic,Government,1
+Denmark,Civil,1
+Denmark,Commercial,1
+Denmark,Government,1
+Denmark,Military,1
+Ecuador,Civil,1
+Egypt,Government,3
+Egypt,Military/Commercial,1
+ESA,Civil,1
+ESA,Commercial,29
+ESA,Government,32
+ESA/USA,Government,1
+ESA/USA/Russia,Government,1
+Estonia,Civil,1
+Ethiopia,Government,2
+Finland,Civil,2
+Finland,Commercial,13
+France,Civil,2
+France,Commercial,5
+France,Military,14
+France/Belgium/Sweden,Commercial,2
+France/Israel,Government,1
+France/Italy,Government,1
+France/Italy,Government/Military,1
+France/Italy,Military,1
+France/Italy/Belgium/Spain/Greece,Military,2
+France/USA,Government,1
+Germany,Civil,16
+Germany,Commercial,11
+Germany,Government,5
+Germany,Government/Civil,4
+Germany,Government/Commercial,1
+Germany,Military,7
+Greece,Commercial,1
+Greece,Commercial/Government,1
+Greece/United Kingdom,Commercial,1
+Hungary,Commercial,1
+India,Civil,3
+India,Commercial,1
+India,Government,44
+India,Government/Commercial,1
+India,Military,9
+India/Canada,Government,1
+India/France,Government,2
+Indonesia,Commercial,5
+Indonesia,Government,3
+Iran,Military,1
+Iraq,Civil,1
+Israel,Civil,1
+Israel,Commercial,3
+Israel,Government,3
+Israel,Military,7
+Israel,Military/Commercial,4
+Italy,Civil,3
+Italy,Commercial,2
+Italy,Government,1
+Italy,Military,2
+Italy,Military/Civil,1
+Italy,Military/Commercial,1
+Italy,Military/Government,4
+Japan,Civil,20
+Japan,Civil/Government,1
+Japan,Commercial,34
+Japan,Commercial/Military,1
+Japan,Government,33
+Japan,Military,1
+Japan/Singapore,Civil,1
+Japan/Singapore,Commercial,1
+Jordan,Civil,1
+Kazakhstan,Civil,1
+Kazakhstan,Commercial,3
+Kazakhstan,Government,2
+Kuwait,Civil,1
+Laos,Government,1
+Lithuania,Commercial,2
+Luxembourg,Commercial,40
+Luxembourg,Government/Military,1
+Malaysia,Commercial,2
+Malaysia,Government,1
+Mauritius,Government,1
+Mexico,Civil,1
+Mexico,Commercial,1
+Mexico,Government,2
+Mexico,Government/Military,1
+Mexico,Military,2
+Morocco,Government,2
+Morocco/Germany,Government,1
+Multinational,Commercial,40
+Multinational,Government,11
+Multinational,Government/Civil,10
+Netherlands,Civil,2
+Netherlands,Commercial,11
+Netherlands,Earth Observation,1
+Netherlands,Government,1
+New Zealand,Commercial,1
+Nigeria,Commercial,1
+Nigeria,Government,2
+Norway,Commercial,3
+Norway,Government,5
+Pakistan,Government,2
+Pakistan,Government/Commercial,1
+Paraguay,Government,1
+Peru,Government,1
+Qatar,Military/Commercial,1
+Russia,Civil,8
+Russia,Civil/Government,1
+Russia,Commercial,37
+Russia,Government,16
+Russia,Government/Civil,1
+Russia,Government/Commercial,3
+Russia,Military,69
+Russia,Military/Commercial,32
+Russia/USA,Commercial,2
+Saudi Arabia,Civil,1
+Saudi Arabia,Commercial,7
+Saudi Arabia,Government,5
+Singapore,Civil,3
+Singapore,Commercial,3
+Singapore,Government,1
+Singapore/Taiwan,Commercial,1
+Slovenia,Civil,2
+South Africa,Civil,2
+South Africa,Military,1
+South Korea,Civil,2
+South Korea,Commercial,3
+South Korea,Government,6
+South Korea,Government/Commercial,4
+South Korea,Military,1
+South Korea,Military/Commercial,1
+Spain,Civil,1
+Spain,Commercial,10
+Spain,Commercial/Civil,1
+Spain,Government,6
+Spain,Government/Commercial/Military,1
+Spain,Military,1
+Spain,Military/Commercial,1
+Spain,Military/Government,1
+Sri Lanka,Civil,1
+Sudan,Government,1
+Sweden,Commercial,1
+Sweden,Government,1
+Switzerland,Civil,1
+Switzerland,Commercial,12
+Taiwan,Government,1
+Taiwan/USA,Government,6
+Taiwan/USA,Government/Civil,5
+Thailand,Civil,1
+Thailand,Commercial,3
+Thailand,Government,1
+Thailand,Military,2
+Tunisia,Commercial,1
+Turkey,Civil,2
+Turkey,Commercial,5
+Turkey,Government,1
+Turkey,Military,2
+Turkmenistan/Monaco,Government/Commercial,1
+Ukraine,Civil,1
+United Arab Emirates,Civil,3
+United Arab Emirates,Commercial,3
+United Arab Emirates,Government,4
+United Arab Emirates,Military,1
+United Arab Emirates,Military/Commercial,2
+United Kingdom,Civil,1
+United Kingdom,Commercial,441
+United Kingdom,Government,1
+United Kingdom,Government/Commercial,1
+United Kingdom,Military,6
+United Kingdom/ESA,Government/Commercial,1
+United Kingdom/Netherlands,Commercial,1
+USA,Civil,28
+USA,Civil/Government,1
+USA,Civil/Military,1
+USA,Commercial,2503
+USA,Commercial/Civil,4
+USA,Government,63
+USA,Government/Civil,18
+USA,Government/Commercial,78
+USA,Government/Military,1
+USA,Military,189
+USA,Military/Civil,5
+USA,Military/Commercial,35
+USA/Argentina,Commercial,4
+USA/Canada,Commercial,2
+USA/Canada/Japan,Government,1
+USA/France,Government,1
+USA/Germany,Government,2
+USA/Japan,Commercial,3
+USA/Japan,Government,2
+USA/Japan/Brazil,Government,1
+USA/Sweden,Military,1
+USA/United Kingdom/Italy,Government/Civil,1
+Venezuela,Government,2
+Vietnam,Government,5
+NA,NA,2

@@ -1,0 +1,54 @@
+---
+title: "SATELLITE USE OVERLAPS"
+subtitle: "Many satellites are used by several groups at once"
+page-layout: custom
+format:
+  html:
+    self-contained: true
+theme: none
+css: style/embed.css
+execute:
+  echo: false
+---
+
+```{ojs}
+//| column: screen
+venn = require("venn.js");
+
+// bring the data in
+satGroupData =
+  await FileAttachment("data/sat-user-overlap-data.csv")
+    .csv({ typed: true });
+
+// bring the country list in as an array
+countries =
+  await FileAttachment("data/sat-user-overlap-countries.csv")
+  .csv({ typed: true });
+countryList = countries.map(d => d.country);
+
+// filter the data based on selected country
+// then split joint user groups into arrays
+viewof countrySelect = Inputs.select(countryList, {label: "Country"});
+filteredData = satGroupData
+  .filter(function(row) {
+    return row.country_owner == countrySelect;
+  })
+  .map(d => ({
+    sets: d.sets.split("/"),
+    label: d.sets.includes("/") ?
+      // html`${d.sets}<br>${d.size}` :
+      // html`blah`,
+      null :
+      d.sets + ": " + d.size,
+    size: d.size
+  }));
+
+// plot the venn diagram for the country
+// https://upset.js.org/venn.js
+overlapChart = d3.select(DOM.svg(500, 400))
+  .call(svg => {
+      svg.datum(filteredData)
+         .call(venn.VennDiagram({ width: 450 }))
+  })
+  .node()
+```

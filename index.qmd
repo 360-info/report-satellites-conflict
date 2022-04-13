@@ -16,6 +16,8 @@ library(janitor)
 library(glue)
 library(here)
 library(pins)
+library(themes360info)
+library(ggtext)
 library(nVennR)
 
 # create /data/.cache
@@ -91,7 +93,7 @@ filter(country_owner != "USA") %>%
     coord_flip() +
     theme_360() +
     theme(
-      plot.subtitle = element_markdowns(family = "Body 360info", face = "plain"),
+      plot.subtitle = element_markdown(family = "Body 360info", face = "plain"),
       panel.grid.major.y = element_blank(),
       panel.grid.minor.y = element_blank(),
       legend.position = c(0.6, 0.2)) +
@@ -114,7 +116,7 @@ knitr::include_graphics(here("out", "sat-count-separated-nousa.png"))
 
 ## Overlap of commercial and government/military use
 
-But what about users? Satellite users include `r glue_collapse(unique(sats$users), collapse = ", ", last = ", and ")`. There's potentially a lot of overlap between a few discrete groups here!
+But what about users? Satellite users include `r glue_collapse(unique(sats$users), sep = ", ", last = ", and ")`. There's potentially a lot of overlap between a few discrete groups here!
 
 Let's investigate that overlap:
 
@@ -131,6 +133,7 @@ sat_ownership %>%
   group_by(users) %>%
   summarise(rows = list(c(rowid))) ->
 us_group_overlap
+
 
 # https://cran.r-project.org/web/packages/nVennR/vignettes/nVennR.html
 plotVenn(us_group_overlap$rows, sNames = us_group_overlap$users,
@@ -164,4 +167,33 @@ sat_ownership %>%
     theme_minimal()
   }
 
+```
+
+## Overlaps
+
+```{r}
+sat_ownership %>%
+  select(country_owner, users) %>%
+  group_by(country_owner, users) %>%
+  summarise(size = n()) %>%
+  ungroup() %>%
+  # mutate(sets = str_split(users, "/")) %>%
+  # select(-users) ->
+  rename(sets = users) ->
+sat_group_data
+
+write_csv(sat_group_data, here("data", "sat-user-overlap-data.csv"))
+write_csv(
+  tibble(country = unique(sat_group_data$country_owner)),
+  here("data", "sat-user-overlap-countries.csv"))
+
+# ojs_define(satGroupData = sat_group_data)
+# ojs_define(countryList = unique(sat_group_data$country_owner))
+```
+
+```{ojs}
+import { countrySelect, overlapChart} from "embed-user-overlaps.qmd";
+
+viewof countrySelect;
+overlapChart;
 ```
