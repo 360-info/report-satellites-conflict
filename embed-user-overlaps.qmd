@@ -1,5 +1,5 @@
 ---
-title: "SATELLITE USE OVERLAPS"
+title: "MIXED USE"
 subtitle: "Many satellites used for commercial or civil purposes are <strong>also used by governments and militaries.</strong> Select a country and see the overlap for launches up to the end of 2021."
 page-layout: custom
 theme: none
@@ -20,6 +20,10 @@ format:
         });
       </script>
 ---
+
+::: {.panel-tabset}
+
+## Chart: James Goldie, 360info. Data: UCS
 
 ```{ojs}
 //| column: screen
@@ -68,24 +72,12 @@ filteredData = satGroupData
 ```
 
 ```{ojs}
-//| label: debug
-//| output: false
-console.log(filteredData);
-console.log(filteredData.length);
-console.log(filteredData.map(d => d.size).join("-"));
-```
-
-```{ojs}
 //| label: diagram
 
-// plot the venn diagram for the country
 // https://upset.js.org/venn.js
-overlapChart = filteredData.length == 0 ?
-  // message if no data
-  html`<div style="width:100%;height:280px;padding-top:25px;display:flex;"><p style="margin:auto;">There are no satellite launches controlled by organizations in <strong>${countrySelect}</strong> in this dataset.</p></div>` :
-  // chart
-  userOverlapChart(filteredData);
-
+overlapChart = filteredData.length > 0 ?
+  userOverlapChart(filteredData) :
+  html`<div style="width:100%;height:280px;padding-top:25px;display:flex;"><p style="margin:auto;">There are no satellite launches controlled by organizations in <strong>${countrySelect}</strong> in this dataset.</p></div>`;
 
 function userOverlapChart(data, {
   width = 640,
@@ -116,3 +108,33 @@ function userOverlapChart(data, {
   return svg.node();
 }
 ```
+
+## Use + Remix {style="font-size:smaller;"}
+
+These charts, as well as the analyses that underpin them, are available under a [**Creative Commons Attribution 4.0**](https://creativecommons.org/licenses/by/4.0) licence.
+
+Please acknowledge [360info](https://360info.org) and the [Union of Concerned Scientists](https://ucsusa.org/resources/satellite-database) when you use these charts and data.
+
+#### Embed this chart in your article
+
+Copy and paste the following code:
+
+::: {.embedcode}
+```
+<iframe src="https://360info-satellitemixeduse.pages.dev/
+embed-bycountry" title="Interactive charts showing the 
+overlap in use of satellites between governments, military,
+commercial and civil uses for a selected country."
+width="550" height="850" scrolling="no" style="border:none;">
+</iframe>
+```
+:::
+
+This content is subject to [360info's Terms of Use](https://newshub.360info.org/page/terms).
+
+#### Get the data and code
+
+* [**Download the data**](https://github.com/360-info/report-satellites-conflict/tree/main/data)
+* [**Recreate or remix the chart**](https://github.com/360-info/report-satellites-conflict)
+
+:::
