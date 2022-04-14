@@ -1,10 +1,7 @@
 ---
 title: "SATELLITE USE OVERLAPS"
-subtitle: "Many satellites are used by several groups at once"
+subtitle: "Many satellites used for commercial or civil purposes are <strong>also used by governments and militaries.</strong> Select a country and see the overlap for launches up to the end of 2021."
 page-layout: custom
-format:
-  html:
-    self-contained: true
 theme: none
 css: style/embed.css
 execute:
@@ -79,7 +76,7 @@ overlapChart = filteredData.length == 0 ?
 
 function userOverlapChart(data, {
   width = 640,
-  height = 400,
+  height = 400
 } = {}) {
   
   // create the chart here!
