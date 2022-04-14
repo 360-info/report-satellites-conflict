@@ -122,10 +122,10 @@ Copy and paste the following code:
 ::: {.embedcode}
 ```
 <iframe src="https://360info-satellitemixeduse.pages.dev/
-embed-bycountry" title="Interactive charts showing the 
+embed-user-overlaps" title="Interactive chart showing the 
 overlap in use of satellites between governments, military,
 commercial and civil uses for a selected country."
-width="550" height="850" scrolling="no" style="border:none;">
+width="500" height="580" scrolling="no" style="border:none;">
 </iframe>
 ```
 :::
