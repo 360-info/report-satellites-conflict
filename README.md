@@ -2,8 +2,6 @@
 
 This analysis uses satellite launch data from the [Union of Concerned Scientists](https://ucsusa.org/resources/satellite-database) to look at how satellites are used by countries and the overlap between commercial use and governmental or militaristic use.
 
-## 
-
 ## ♻️ Use + Remix rights
 
 ![[Creative Commons Attribution 4.0](https://creativecommons.org/licenses/by/4.0)](https://mirrors.creativecommons.org/presskit/buttons/80x15/png/by.png)
@@ -23,10 +21,10 @@ Data in these charts comes from:
 Graphics and embeddable interactives are in the [`out`](./out) folder. If you'd simply like to embed our version in your story, use the following code:
 
 ```html
-<iframe src="https://360info-satellitemixeduse.pages.dev/
-embed-user-overlaps" title="Interactive chart showing the 
-overlap in use of satellites between governments, military,
-commercial and civil uses for a selected country."
+<iframe
+src="https://360info-satellitemixeduse.pages.dev/embed-user-overlaps" title="Interactive chart showing the overlap in use of satellites
+between governments, military, commercial and civil uses for a
+selected country."
 width="500" height="580" scrolling="no" style="border:none;">
 </iframe>
 ```
