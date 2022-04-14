@@ -844,59 +844,27 @@ attr(,"class")
 <div class="sourceCode" id="cb24"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="co"># https://observablehq.com/@simulmedia/basic-venn-diagram</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
-<p>This starts to give us an idea of the kinds of overlaps we can explore! In the case of the US, there’s a significant overlap between commercial use and government/military uses.</p>
-<section id="aside-what-kinds-of-purposes-do-different-users-put-satellites-to" class="level3">
-<h3 class="anchored" data-anchor-id="aside-what-kinds-of-purposes-do-different-users-put-satellites-to">Aside: what kinds of purposes do different users put satellites to?</h3>
-<div class="cell">
-<details>
-<summary>Code</summary>
-<div class="sourceCode" id="cb25"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>sat_ownership <span class="sc">%&gt;%</span></span>
-<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">rowid =</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">n</span>()) <span class="sc">%&gt;%</span></span>
-<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(rowid, users, purpose) <span class="sc">%&gt;%</span></span>
-<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">separate_rows</span>(users, <span class="at">sep =</span> <span class="st">"/"</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">separate_rows</span>(purpose, <span class="at">sep =</span> <span class="st">"/"</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(users), <span class="sc">!</span><span class="fu">is.na</span>(purpose), users <span class="sc">!=</span> <span class="st">"Earth Observation"</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">purpose =</span> <span class="fu">fct_infreq</span>(purpose)) <span class="sc">%&gt;%</span></span>
-<span id="cb25-8"><a href="#cb25-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(users, purpose) <span class="sc">%&gt;%</span></span>
-<span id="cb25-9"><a href="#cb25-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">n =</span> <span class="fu">n</span>()) <span class="sc">%&gt;%</span></span>
-<span id="cb25-10"><a href="#cb25-10" aria-hidden="true" tabindex="-1"></a>  {</span>
-<span id="cb25-11"><a href="#cb25-11" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ggplot</span>(.) <span class="sc">+</span></span>
-<span id="cb25-12"><a href="#cb25-12" aria-hidden="true" tabindex="-1"></a>    <span class="fu">aes</span>(<span class="at">x =</span> users, <span class="at">y =</span> n, <span class="at">fill =</span> purpose) <span class="sc">+</span></span>
-<span id="cb25-13"><a href="#cb25-13" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_col</span>(<span class="at">position =</span> <span class="st">"fill"</span>) <span class="sc">+</span></span>
-<span id="cb25-14"><a href="#cb25-14" aria-hidden="true" tabindex="-1"></a>    <span class="fu">scale_fill_brewer</span>(<span class="at">type =</span> <span class="st">"qual"</span>) <span class="sc">+</span></span>
-<span id="cb25-15"><a href="#cb25-15" aria-hidden="true" tabindex="-1"></a>    <span class="fu">scale_y_continuous</span>(<span class="at">labels =</span> scales<span class="sc">::</span><span class="fu">label_percent</span>()) <span class="sc">+</span></span>
-<span id="cb25-16"><a href="#cb25-16" aria-hidden="true" tabindex="-1"></a>    <span class="fu">coord_flip</span>() <span class="sc">+</span></span>
-<span id="cb25-17"><a href="#cb25-17" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme_minimal</span>()</span>
-<span id="cb25-18"><a href="#cb25-18" aria-hidden="true" tabindex="-1"></a>  }</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
-<div class="cell-output-stderr">
-<pre><code>`summarise()` has grouped output by 'users'. You can override using the
-`.groups` argument.</code></pre>
-</div>
-<div class="cell-output-stderr">
-<pre><code>Warning in RColorBrewer::brewer.pal(n, pal): n too large, allowed maximum for palette Accent is 8
-Returning the palette you asked for with that many colors</code></pre>
-</div>
-<div class="cell-output-display">
-<p><img src="index_files/figure-html/unnamed-chunk-11-1.png" class="img-fluid" width="672"></p>
-</div>
-</div>
-</section>
+<p>This starts to give us an idea of the kinds of overlaps we can explore! In the case of the US, for example, there’s a significant overlap between commercial use and government/military uses.</p>
 </section>
 <section id="overlaps" class="level2">
 <h2 class="anchored" data-anchor-id="overlaps">Overlaps</h2>
+<p>If we naturally group our data by users when some are specified jointly, we’ll end with single-use totals that are <em>exclusive</em> of joint use. So for example, it may say that 3 sats are specified as Commercial use and 3 more are specified as Government + Commercial use.</p>
+<p>In order to visualise this data with <code>venn.js</code>, we need single-use totals to be <em>inclusive</em>: that 8 are Commercial use and that 3 of those 8 are Government + Commercial.</p>
 <div class="cell">
 <details>
 <summary>Code</summary>
-<div class="sourceCode" id="cb28"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>sat_ownership <span class="sc">%&gt;%</span></span>
-<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(country_owner, users) <span class="sc">%&gt;%</span></span>
-<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(country_owner, users) <span class="sc">%&gt;%</span></span>
-<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">size =</span> <span class="fu">n</span>()) <span class="sc">%&gt;%</span></span>
-<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>() <span class="sc">%&gt;%</span></span>
-<span id="cb28-6"><a href="#cb28-6" aria-hidden="true" tabindex="-1"></a>  <span class="co"># mutate(sets = str_split(users, "/")) %&gt;%</span></span>
-<span id="cb28-7"><a href="#cb28-7" aria-hidden="true" tabindex="-1"></a>  <span class="co"># select(-users) -&gt;</span></span>
-<span id="cb28-8"><a href="#cb28-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">sets =</span> users) <span class="ot">-&gt;</span></span>
-<span id="cb28-9"><a href="#cb28-9" aria-hidden="true" tabindex="-1"></a>sat_group_data</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb25"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="co"># do the basic aggregation</span></span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>sat_ownership <span class="sc">%&gt;%</span></span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(country_owner, users) <span class="sc">%&gt;%</span></span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>  <span class="co"># make sure we also catch any cases where there's both B/A and A/B listed</span></span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">users =</span> <span class="fu">map_chr</span>(users,</span>
+<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a>    <span class="sc">~</span> <span class="fu">paste</span>(<span class="fu">sort</span>(<span class="fu">unlist</span>(<span class="fu">str_split</span>(.x, <span class="st">"/"</span>))), <span class="at">collapse =</span> <span class="st">"/"</span>))) <span class="sc">%&gt;%</span></span>
+<span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a>  <span class="co"># sum up</span></span>
+<span id="cb25-8"><a href="#cb25-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(country_owner, users) <span class="sc">%&gt;%</span></span>
+<span id="cb25-9"><a href="#cb25-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">size =</span> <span class="fu">n</span>()) <span class="sc">%&gt;%</span></span>
+<span id="cb25-10"><a href="#cb25-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb25-11"><a href="#cb25-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">sets =</span> users) <span class="ot">-&gt;</span></span>
+<span id="cb25-12"><a href="#cb25-12" aria-hidden="true" tabindex="-1"></a>sat_group_data</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-stderr">
 <pre><code>`summarise()` has grouped output by 'country_owner'. You can override using the
@@ -904,21 +872,57 @@ Returning the palette you asked for with that many colors</code></pre>
 </div>
 <details>
 <summary>Code</summary>
-<div class="sourceCode" id="cb30"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="fu">write_csv</span>(sat_group_data, <span class="fu">here</span>(<span class="st">"data"</span>, <span class="st">"sat-user-overlap-data.csv"</span>))</span>
-<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a><span class="fu">write_csv</span>(</span>
-<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tibble</span>(<span class="at">country =</span> <span class="fu">unique</span>(sat_group_data<span class="sc">$</span>country_owner)),</span>
-<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">here</span>(<span class="st">"data"</span>, <span class="st">"sat-user-overlap-countries.csv"</span>))</span>
-<span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb30-6"><a href="#cb30-6" aria-hidden="true" tabindex="-1"></a><span class="co"># ojs_define(satGroupData = sat_group_data)</span></span>
-<span id="cb30-7"><a href="#cb30-7" aria-hidden="true" tabindex="-1"></a><span class="co"># ojs_define(countryList = unique(sat_group_data$country_owner))</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb27"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="co"># in order to use this data with venn.js, data for single uses needs to be</span></span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a><span class="co"># _inclusive_ of overlaps, not exclusive. so for example, if 3 sats are civil</span></span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a><span class="co"># only and 3 more are gov+civil, cviil should be specified as 8, not 3!</span></span>
+<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a>sat_group_data <span class="sc">%&gt;%</span></span>
+<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">separate_rows</span>(sets, <span class="at">sep =</span> <span class="st">"/"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb27-6"><a href="#cb27-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(country_owner, sets) <span class="sc">%&gt;%</span></span>
+<span id="cb27-7"><a href="#cb27-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">size =</span> <span class="fu">sum</span>(size, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb27-8"><a href="#cb27-8" aria-hidden="true" tabindex="-1"></a>  ungroup <span class="ot">-&gt;</span></span>
+<span id="cb27-9"><a href="#cb27-9" aria-hidden="true" tabindex="-1"></a>sat_inclusive_use</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-stderr">
+<pre><code>`summarise()` has grouped output by 'country_owner'. You can override using the
+`.groups` argument.</code></pre>
+</div>
+<details>
+<summary>Code</summary>
+<div class="sourceCode" id="cb29"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="co"># now combine exclusive and inclusive use together again</span></span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>sat_group_data <span class="sc">%&gt;%</span> <span class="fu">filter</span>(<span class="fu">str_detect</span>(sets, <span class="st">"/"</span>))  <span class="ot">-&gt;</span> sat_joint_use</span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a>sat_group_data <span class="sc">%&gt;%</span> <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">str_detect</span>(sets, <span class="st">"/"</span>)) <span class="ot">-&gt;</span> sat_exclusive_use</span>
+<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a><span class="co"># rows (country + user) that appear in `sat_inclusive_use` but *not*</span></span>
+<span id="cb29-6"><a href="#cb29-6" aria-hidden="true" tabindex="-1"></a><span class="co"># `sat_exclusive_use` are totally overlapped</span></span>
+<span id="cb29-7"><a href="#cb29-7" aria-hidden="true" tabindex="-1"></a><span class="co"># let's mark them so that we can remove their labels later</span></span>
+<span id="cb29-8"><a href="#cb29-8" aria-hidden="true" tabindex="-1"></a>sat_inclusive_use <span class="sc">%&gt;%</span></span>
+<span id="cb29-9"><a href="#cb29-9" aria-hidden="true" tabindex="-1"></a> <span class="fu">anti_join</span>(sat_exclusive_use, <span class="at">by =</span> <span class="fu">c</span>(<span class="st">"country_owner"</span>, <span class="st">"sets"</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb29-10"><a href="#cb29-10" aria-hidden="true" tabindex="-1"></a> <span class="fu">mutate</span>(<span class="at">overlapped =</span> <span class="cn">TRUE</span>) <span class="ot">-&gt;</span></span>
+<span id="cb29-11"><a href="#cb29-11" aria-hidden="true" tabindex="-1"></a>sat_inclusive_overlapped</span>
+<span id="cb29-12"><a href="#cb29-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-13"><a href="#cb29-13" aria-hidden="true" tabindex="-1"></a>sat_inclusive_use <span class="sc">%&gt;%</span></span>
+<span id="cb29-14"><a href="#cb29-14" aria-hidden="true" tabindex="-1"></a> <span class="fu">semi_join</span>(sat_exclusive_use, <span class="at">by =</span> <span class="fu">c</span>(<span class="st">"country_owner"</span>, <span class="st">"sets"</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb29-15"><a href="#cb29-15" aria-hidden="true" tabindex="-1"></a> <span class="fu">mutate</span>(<span class="at">overlapped =</span> <span class="cn">FALSE</span>) <span class="ot">-&gt;</span></span>
+<span id="cb29-16"><a href="#cb29-16" aria-hidden="true" tabindex="-1"></a>sat_inclusive_notoverlapped</span>
+<span id="cb29-17"><a href="#cb29-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-18"><a href="#cb29-18" aria-hidden="true" tabindex="-1"></a>sat_joint_use <span class="sc">%&gt;%</span></span>
+<span id="cb29-19"><a href="#cb29-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">overlapped =</span> <span class="cn">FALSE</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb29-20"><a href="#cb29-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">bind_rows</span>(sat_inclusive_overlapped) <span class="sc">%&gt;%</span></span>
+<span id="cb29-21"><a href="#cb29-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">bind_rows</span>(sat_inclusive_notoverlapped) <span class="ot">-&gt;</span></span>
+<span id="cb29-22"><a href="#cb29-22" aria-hidden="true" tabindex="-1"></a>sat_use_all</span>
+<span id="cb29-23"><a href="#cb29-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-24"><a href="#cb29-24" aria-hidden="true" tabindex="-1"></a><span class="fu">write_csv</span>(sat_use_all, <span class="fu">here</span>(<span class="st">"data"</span>, <span class="st">"sat-user-overlap-data.csv"</span>))</span>
+<span id="cb29-25"><a href="#cb29-25" aria-hidden="true" tabindex="-1"></a><span class="fu">write_csv</span>(</span>
+<span id="cb29-26"><a href="#cb29-26" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tibble</span>(<span class="at">country =</span> <span class="fu">unique</span>(sat_group_data<span class="sc">$</span>country_owner)),</span>
+<span id="cb29-27"><a href="#cb29-27" aria-hidden="true" tabindex="-1"></a>  <span class="fu">here</span>(<span class="st">"data"</span>, <span class="st">"sat-user-overlap-countries.csv"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
 <div class="cell">
 <details>
 <summary>Code</summary>
-<div class="sourceCode" id="cb31" data-startfrom="195" data-source-offset="-0"><pre class="sourceCode js cell-code code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 194;"><span id="cb31-195"><a href="#cb31-195" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> { countrySelect<span class="op">,</span> overlapChart} <span class="im">from</span> <span class="st">"embed-user-overlaps.qmd"</span><span class="op">;</span></span>
-<span id="cb31-196"><a href="#cb31-196" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-197"><a href="#cb31-197" aria-hidden="true" tabindex="-1"></a>viewof countrySelect<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb30" data-startfrom="207" data-source-offset="-0"><pre class="sourceCode js cell-code code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 206;"><span id="cb30-207"><a href="#cb30-207" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> { countrySelect<span class="op">,</span> overlapChart} <span class="im">from</span> <span class="st">"embed-user-overlaps.qmd"</span><span class="op">;</span></span>
+<span id="cb30-208"><a href="#cb30-208" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-209"><a href="#cb30-209" aria-hidden="true" tabindex="-1"></a>viewof countrySelect<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
 <div>
@@ -936,7 +940,7 @@ Returning the palette you asked for with that many colors</code></pre>
 </div>
 <details>
 <summary>Code</summary>
-<div class="sourceCode" id="cb32" data-startfrom="198" data-source-offset="-93"><pre class="sourceCode js cell-code code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 197;"><span id="cb32-198"><a href="#cb32-198" aria-hidden="true" tabindex="-1"></a>overlapChart<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb31" data-startfrom="210" data-source-offset="-93"><pre class="sourceCode js cell-code code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 209;"><span id="cb31-210"><a href="#cb31-210" aria-hidden="true" tabindex="-1"></a>overlapChart<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
 <div>
@@ -946,9 +950,46 @@ Returning the palette you asked for with that many colors</code></pre>
 </div>
 </div>
 </div>
+<section id="aside-what-kinds-of-purposes-do-different-users-put-satellites-to" class="level3">
+<h3 class="anchored" data-anchor-id="aside-what-kinds-of-purposes-do-different-users-put-satellites-to">Aside: what kinds of purposes do different users put satellites to?</h3>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode" id="cb32"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>sat_ownership <span class="sc">%&gt;%</span></span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">rowid =</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">n</span>()) <span class="sc">%&gt;%</span></span>
+<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(rowid, users, purpose) <span class="sc">%&gt;%</span></span>
+<span id="cb32-4"><a href="#cb32-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">separate_rows</span>(users, <span class="at">sep =</span> <span class="st">"/"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb32-5"><a href="#cb32-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">separate_rows</span>(purpose, <span class="at">sep =</span> <span class="st">"/"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb32-6"><a href="#cb32-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(users), <span class="sc">!</span><span class="fu">is.na</span>(purpose), users <span class="sc">!=</span> <span class="st">"Earth Observation"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb32-7"><a href="#cb32-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">purpose =</span> <span class="fu">fct_infreq</span>(purpose)) <span class="sc">%&gt;%</span></span>
+<span id="cb32-8"><a href="#cb32-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(users, purpose) <span class="sc">%&gt;%</span></span>
+<span id="cb32-9"><a href="#cb32-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">n =</span> <span class="fu">n</span>()) <span class="sc">%&gt;%</span></span>
+<span id="cb32-10"><a href="#cb32-10" aria-hidden="true" tabindex="-1"></a>  {</span>
+<span id="cb32-11"><a href="#cb32-11" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ggplot</span>(.) <span class="sc">+</span></span>
+<span id="cb32-12"><a href="#cb32-12" aria-hidden="true" tabindex="-1"></a>    <span class="fu">aes</span>(<span class="at">x =</span> users, <span class="at">y =</span> n, <span class="at">fill =</span> purpose) <span class="sc">+</span></span>
+<span id="cb32-13"><a href="#cb32-13" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_col</span>(<span class="at">position =</span> <span class="st">"fill"</span>) <span class="sc">+</span></span>
+<span id="cb32-14"><a href="#cb32-14" aria-hidden="true" tabindex="-1"></a>    <span class="fu">scale_fill_brewer</span>(<span class="at">type =</span> <span class="st">"qual"</span>) <span class="sc">+</span></span>
+<span id="cb32-15"><a href="#cb32-15" aria-hidden="true" tabindex="-1"></a>    <span class="fu">scale_y_continuous</span>(<span class="at">labels =</span> scales<span class="sc">::</span><span class="fu">label_percent</span>()) <span class="sc">+</span></span>
+<span id="cb32-16"><a href="#cb32-16" aria-hidden="true" tabindex="-1"></a>    <span class="fu">coord_flip</span>() <span class="sc">+</span></span>
+<span id="cb32-17"><a href="#cb32-17" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme_minimal</span>()</span>
+<span id="cb32-18"><a href="#cb32-18" aria-hidden="true" tabindex="-1"></a>  }</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-stderr">
+<pre><code>`summarise()` has grouped output by 'users'. You can override using the
+`.groups` argument.</code></pre>
+</div>
+<div class="cell-output-stderr">
+<pre><code>Warning in RColorBrewer::brewer.pal(n, pal): n too large, allowed maximum for palette Accent is 8
+Returning the palette you asked for with that many colors</code></pre>
+</div>
+<div class="cell-output-display">
+<p><img src="index_files/figure-html/unnamed-chunk-15-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
 
 
 
+</section>
 </section>
 </main> <!-- /main -->
 <script type="ojs-module-contents">

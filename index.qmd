@@ -142,7 +142,73 @@ plotVenn(us_group_overlap$rows, sNames = us_group_overlap$users,
 # https://observablehq.com/@simulmedia/basic-venn-diagram
 ```
 
-This starts to give us an idea of the kinds of overlaps we can explore! In the case of the US, there's a significant overlap between commercial use and government/military uses.
+This starts to give us an idea of the kinds of overlaps we can explore! In the case of the US, for example, there's a significant overlap between commercial use and government/military uses.
+
+## Overlaps
+
+If we naturally group our data by users when some are specified jointly, we'll end with single-use totals that are _exclusive_ of joint use. So for example, it may say that 3 sats are specified as Commercial use and 3 more are specified as Government + Commercial use.
+
+In order to visualise this data with `venn.js`, we need single-use totals to be _inclusive_: that 8 are Commercial use and that 3 of those 8 are Government + Commercial.
+
+```{r}
+# do the basic aggregation
+sat_ownership %>%
+  select(country_owner, users) %>%
+  # make sure we also catch any cases where there's both B/A and A/B listed
+  mutate(users = map_chr(users,
+    ~ paste(sort(unlist(str_split(.x, "/"))), collapse = "/"))) %>%
+  # sum up
+  group_by(country_owner, users) %>%
+  summarise(size = n()) %>%
+  ungroup() %>%
+  rename(sets = users) ->
+sat_group_data
+
+# in order to use this data with venn.js, data for single uses needs to be
+# _inclusive_ of overlaps, not exclusive. so for example, if 3 sats are civil
+# only and 3 more are gov+civil, cviil should be specified as 8, not 3!
+sat_group_data %>%
+  separate_rows(sets, sep = "/") %>%
+  group_by(country_owner, sets) %>%
+  summarise(size = sum(size, na.rm = TRUE)) %>%
+  ungroup ->
+sat_inclusive_use
+
+# now combine exclusive and inclusive use together again
+sat_group_data %>% filter(str_detect(sets, "/"))  -> sat_joint_use
+sat_group_data %>% filter(!str_detect(sets, "/")) -> sat_exclusive_use
+
+# rows (country + user) that appear in `sat_inclusive_use` but *not*
+# `sat_exclusive_use` are totally overlapped
+# let's mark them so that we can remove their labels later
+sat_inclusive_use %>%
+ anti_join(sat_exclusive_use, by = c("country_owner", "sets")) %>%
+ mutate(overlapped = TRUE) ->
+sat_inclusive_overlapped
+
+sat_inclusive_use %>%
+ semi_join(sat_exclusive_use, by = c("country_owner", "sets")) %>%
+ mutate(overlapped = FALSE) ->
+sat_inclusive_notoverlapped
+
+sat_joint_use %>%
+  mutate(overlapped = FALSE) %>%
+  bind_rows(sat_inclusive_overlapped) %>%
+  bind_rows(sat_inclusive_notoverlapped) ->
+sat_use_all
+
+write_csv(sat_use_all, here("data", "sat-user-overlap-data.csv"))
+write_csv(
+  tibble(country = unique(sat_group_data$country_owner)),
+  here("data", "sat-user-overlap-countries.csv"))
+```
+
+```{ojs}
+import { countrySelect, overlapChart} from "embed-user-overlaps.qmd";
+
+viewof countrySelect;
+overlapChart;
+```
 
 ### Aside: what kinds of purposes do different users put satellites to?
 
@@ -167,33 +233,4 @@ sat_ownership %>%
     theme_minimal()
   }
 
-```
-
-## Overlaps
-
-```{r}
-sat_ownership %>%
-  select(country_owner, users) %>%
-  group_by(country_owner, users) %>%
-  summarise(size = n()) %>%
-  ungroup() %>%
-  # mutate(sets = str_split(users, "/")) %>%
-  # select(-users) ->
-  rename(sets = users) ->
-sat_group_data
-
-write_csv(sat_group_data, here("data", "sat-user-overlap-data.csv"))
-write_csv(
-  tibble(country = unique(sat_group_data$country_owner)),
-  here("data", "sat-user-overlap-countries.csv"))
-
-# ojs_define(satGroupData = sat_group_data)
-# ojs_define(countryList = unique(sat_group_data$country_owner))
-```
-
-```{ojs}
-import { countrySelect, overlapChart} from "embed-user-overlaps.qmd";
-
-viewof countrySelect;
-overlapChart;
 ```

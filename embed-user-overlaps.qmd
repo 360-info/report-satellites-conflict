@@ -13,7 +13,8 @@ execute:
 
 ```{ojs}
 //| column: screen
-venn = require("venn.js");
+// venn = require("venn.js");
+venn = require("@upsetjs/venn.js");
 
 // bring the data in
 satGroupData =
@@ -35,20 +36,53 @@ filteredData = satGroupData
   })
   .map(d => ({
     sets: d.sets.split("/"),
-    label: d.sets.includes("/") ?
-      // html`${d.sets}<br>${d.size}` :
-      // html`blah`,
-      null :
-      d.sets + ": " + d.size,
-    size: d.size
+    label: d.overlapped == "TRUE" ?
+      " " :
+      d.sets.includes("/") ?
+        `${d.sets.split('/').map(d => d.substring(0,3)).join('/')}: ${d.size}` :
+        `${d.sets}: ${d.size}`,    // unsure why htl isn't working here! 
+    size: d.size,
+    overlapped: d.overlapped//,
+    // color: d.sets.includes("/") ?
+    //   null :
+    //   // todo: colour?
   }));
+```
+
+```{ojs}
+//| label: debug
+//| output: false
+console.log(filteredData);
+console.log(filteredData.length);
+console.log(filteredData.map(d => d.size).join("-"));
+```
+
+```{ojs}
+//| label: diagram
 
 // plot the venn diagram for the country
 // https://upset.js.org/venn.js
-overlapChart = d3.select(DOM.svg(500, 400))
+overlapChart = filteredData.length == 0 ?
+  // message if no data
+  html`<div style="width:100%;height:280px;padding-top:25px;display:flex;"><p style="margin:auto;">There are no satellite launches controlled by organizations in <strong>${countrySelect}</strong> in this dataset.</p></div>` :
+  // chart
+  d3.select(DOM.svg(600, 400))
   .call(svg => {
       svg.datum(filteredData)
-         .call(venn.VennDiagram({ width: 450 }))
+         .call(venn.VennDiagram({
+            width: 450,
+            // colourScheme: ["#333333", "#666666", "#999999", "#cccccc"]
+            colourMap: {
+              "Government": "#ff0000",
+              "Military": "#00ff00",
+              "Civil": "#0000ff",
+              "Commercial": "#ffff00"
+            }
+          }))
   })
   .node()
+
+// overlapChart = html`${filteredData.map(d => d.size).join('-')}`
+
+// TODO - fixed colours!
 ```
