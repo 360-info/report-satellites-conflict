@@ -24,6 +24,8 @@ format:
       </script>
 ---
 
+{{< include _popup-buttons.qmd >}}
+
 ```{ojs}
 //| column: screen
 // venn = require("venn.js");
@@ -109,65 +111,4 @@ function userOverlapChart(data, {
 ```
 
 <!-- and here's the popup itself! -->
-
-```{ojs}
-//| include: false
-
-micro = require("micromodal@0.4.10")
-micro.init({
-  awaitOpenAnimation: true,
-  awaitCloseAnimation: true
-});
-```
-
-<!-- dialog buttons -->
-
-::: {.modalpanel}
-<a href="#" data-micromodal-trigger="modaluseremix" tabindex="0">
-  <i class="bi bi-share-fill"></i>
-  Share
-</a>
-
-Chart: James Goldie, 360info. Data: UCS
-:::
-
-<!-- dialog box -->
-
-::::::: {#modaluseremix .modal .micromodal-slide aria-hidden="true"}
-:::::: {.modal__overlay tabindex="-1" data-micromodal-close="true"}
-::::: {.modal__container role="dialog" aria-modal="true" aria-labelledby="modaluseremix-title"}
-
-<button class="modal__close" aria-label="Close modal" data-micromodal-close></button>
-
-:::: {#modaluseremix-content}
-These charts, as well as the analyses that underpin them, are available under a [**Creative Commons Attribution 4.0**](https://creativecommons.org/licenses/by/4.0) licence.
-
-Please acknowledge [360info](https://360info.org) and the [Union of Concerned Scientists](https://ucsusa.org/resources/satellite-database) when you use these charts and data.
-
-#### Embed this chart in your article
-
-Copy and paste the following code:
-
-::: {.embedcode}
-```
-<iframe
-src="https://360info-satellitemixeduse.pages.dev/
-embed-user-overlaps" title="Interactive chart showing the 
-overlap in use of satellites between governments, military,
-commercial and civil uses for a selected country."
-width="500" height="580" scrolling="no" style="border:none;">
-</iframe>
-```
-:::
-
-This content is subject to [360info's Terms of Use](https://newshub.360info.org/page/terms).
-
-#### Get the data and code
-
-* [**Download the data**](https://github.com/360-info/report-satellites-conflict/tree/main/data)
-* [**Recreate or remix the chart**](https://github.com/360-info/report-satellites-conflict)
-::::
-
-:::::
-::::::
-:::::::
+{{< include _popup-dialogs.qmd >}}
