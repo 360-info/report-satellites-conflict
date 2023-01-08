@@ -52,7 +52,12 @@ allColours = ({
 
 // filter the data based on selected country
 // then split joint user groups into arrays
-viewof countrySelect = Inputs.select(countryList, {label: "Country"});
+viewof countrySelect = Inputs.select(countryList,
+  {
+    label: "Country",
+    value: "Italy"
+  });
+
 filteredData = satGroupData
   .filter(function(row) {
     return row.country_owner == countrySelect;
