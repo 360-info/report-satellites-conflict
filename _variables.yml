@@ -4,4 +4,4 @@ embed:
     &lt;iframe allow=&quotfullscreen&quot allowfullscreen=&quottrue&quot src=&quot;
   url: https://360info-satellitemixeduse.pages.dev/embed-user-overlaps
   after: |
-    &quot; title="Interactive: shared satellite use" style="width:100%; height:630px; border:none; background-color: white;" scrolling="no">&lt;/iframe&gt;
+    &quot; title="Interactive: shared satellite use" style="width:100%; height:640px; border:none; background-color: white;" scrolling="no">&lt;/iframe&gt;
